@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { Button } from 'primereact/button';
 
-const DashboardMenu = () => {
+const DashboardMenu = (props) => {
 	return (
 		<>
 			<div className="dashboardMenu">

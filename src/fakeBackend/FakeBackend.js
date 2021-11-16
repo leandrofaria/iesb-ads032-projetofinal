@@ -29,7 +29,7 @@ export const signup = (name, username, password) => {
 	const users = backend['users'] || [];
 
 	const existingUsers = users.filter((user) => {
-		if (user.username === username) return user;
+		return user.username === username;
 	});
 
 	if (existingUsers.length > 0) {

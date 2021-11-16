@@ -38,8 +38,6 @@ export const autoLogin = () => {
 		const frontend = JSON.parse(localStorage.getItem('frontend'));
 		const user = frontend['user'];
 
-		console.log(user);
-
 		return user;
 	}
 };
