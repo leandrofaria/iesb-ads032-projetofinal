@@ -1,8 +1,17 @@
 import { React } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
+import * as AuthService from '../../services/AuthService';
 
 const MainMenu = (props) => {
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		props.setAuthUser(null);
+		AuthService.logout();
+		navigate('/');
+	};
+
 	return (
 		<>
 			<ul>
@@ -11,20 +20,39 @@ const MainMenu = (props) => {
 						<Button>Página Inicial</Button>
 					</li>
 				</Link>
-				<Link to="/painel" onClick={props.closeMenu}>
+				{props.authUser !== null && props.authUser !== undefined && (
+					<Link to="/painel" onClick={props.closeMenu}>
+						<li>
+							<Button>Painel de Finanças</Button>
+						</li>
+					</Link>
+				)}
+				{props.authUser === null ||
+					(props.authUser === undefined && (
+						<Link to="/login" onClick={props.closeMenu}>
+							<li>
+								<Button>Login</Button>
+							</li>
+						</Link>
+					))}
+				{props.authUser !== null && props.authUser !== undefined && (
 					<li>
-						<Button>Painel de Finanças</Button>
+						<Button onClick={handleLogout}>Logout</Button>
+					</li>
+				)}
+				{props.authUser === null ||
+					(props.authUser === undefined && (
+						<Link to="/signup" onClick={props.closeMenu}>
+							<li>
+								<Button>Cadastro</Button>
+							</li>
+						</Link>
+					))}
+				<Link to="/config" onClick={props.closeMenu}>
+					<li>
+						<Button>Configurações Avançadas</Button>
 					</li>
 				</Link>
-				<li>
-					<Button>Login</Button>
-				</li>
-				<li>
-					<Button>Cadastro</Button>
-				</li>
-				<li>
-					<Button>Configurações Avançadas</Button>
-				</li>
 				<Link to="/sobre" onClick={props.closeMenu}>
 					<li>
 						<Button>Sobre o Projeto</Button>

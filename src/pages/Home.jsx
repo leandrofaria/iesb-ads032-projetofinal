@@ -3,7 +3,6 @@ import { FaCheck } from 'react-icons/fa';
 import { Button } from 'primereact/button';
 import { Panel } from 'primereact/panel';
 import { Link } from 'react-router-dom';
-import { IoMdLogIn } from 'react-icons/io';
 
 const Home = () => {
 	return (
@@ -15,24 +14,27 @@ const Home = () => {
 				<div className="p-col-12 p-lg-6">
 					<h1>Tenha total controle sobre suas finanças</h1>
 					<hr />
+					<br />
 					<h2>
 						<FaCheck style={{ color: 'rgba(0, 200, 0, 1)' }} />
 						&nbsp;Totalmente responsivo!
 					</h2>
+					<br />
 					<h2>
 						<FaCheck style={{ color: 'rgba(0, 200, 0, 1)' }} />
 						&nbsp;Gratuito e seguro!
 					</h2>
+					<br />
 					<h2>
 						<FaCheck style={{ color: 'rgba(0, 200, 0, 1)' }} />
 						&nbsp;Absolutamente topíssimo!
 					</h2>
+					<br />
 					<hr />
 					<br />
-					<Button>
-						<IoMdLogIn />
-						&nbsp;Entrar Agora!
-					</Button>
+					<Link to="/login">
+						<Button>Entrar Agora!</Button>
+					</Link>
 				</div>
 			</div>
 			<br />

@@ -7,11 +7,11 @@ const Header = (props) => {
 	return (
 		<>
 			<header>
-				<div></div>
+				<div style={{ width: '60px' }}></div>
 				<Link to="/">
 					<h1>Controle de Gastos</h1>
 				</Link>
-				<div>
+				<div style={{ width: '60px', textAlign: 'right' }}>
 					<Button onClick={props.toggleMenu} className="p-button-sm">
 						<FaBars />
 					</Button>

@@ -10,18 +10,36 @@ body {
 	background-size: cover;
 	color: #454545;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	padding: 0;
+}
 a {
-	color: rgba(17, 101, 18, 1);
+	color: rgba(17, 151, 18, 1);
 	text-decoration: none;
 }
 a:hover {
 	color: rgba(0, 200, 0, 1);
+}
+button {
+	box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.2);
 }
 hr {
 	width: 100%;
 	border: 0;
 	height: 1px;
 	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+hr.rightFade {
+	width: 100%;
+	border: 0;
+	height: 1px;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 header {
 	width: 100vw;
@@ -113,6 +131,58 @@ footer {
 	max-width: 90vw;
 	filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.8));
 }
+.responsiveCard {
+	margin: auto;
+	width: 600px;
+	background-color: #ffffff;
+	border-color: #505050;
+	border-radius: 4px;
+	box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+	padding: 20px;
+}
+.responsiveCard h1 {
+	margin: 0 !important;
+	font-size: 1rem;
+	font-weight: bold;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(0, 200, 0, 1);
+}
+.formLayout {
+	width: 100%;
+	text-align: left;
+}
+.formLayout label {
+	display: inline-block;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+.formLayout input {
+	width: 100%;
+	margin-bottom: 15px;
+	border-radius: 5px;
+}
+.formLayout button {
+	width: auto;
+	min-width: 200px;
+	justify-content: center;
+}
+.dashboardMenu {
+	width: 100%;
+}
+.dashboardMenu button {
+	width: 100%;
+	justify-content: center;
+}
+.dashboardMenu ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.dashboardMenu ul li {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 10px;
+}
 @media all and (max-width: 800px) {
 	.mainContainer {
 		width: 100%;
@@ -123,5 +193,14 @@ footer {
 	}
 	.hiddenMenu {
 		left: calc(100vw + 1px);
+	}
+	header h1 {
+		font-size: 1.4rem;
+	}
+	.responsiveCard {
+		width: 100%;
+	}
+	.formLayout button {
+		width: 100%;
 	}
 }
