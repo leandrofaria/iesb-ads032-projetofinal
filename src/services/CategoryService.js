@@ -24,3 +24,11 @@ export const deleteCategory = (data) => {
 
 	return response;
 };
+
+export const updateCategory = (data) => {
+	const authUser = AuthService.autoLogin();
+
+	const response = fakeBackend.updateCategory(authUser, data);
+
+	return response;
+};

@@ -14,12 +14,16 @@ import { confirmDialog } from 'primereact/confirmdialog';
 const Categories = (props) => {
 	const [categories, setCategories] = useState([]);
 	const [addingCategory, setAddingCategory] = useState(false);
+	const [categoryBeingEdited, setCategoryBeingEdited] = useState(null);
+	const [editingCategory, setEditingCategory] = useState(false);
 
 	const clickHandleAddCategory = () => {
+		setEditingCategory(false);
 		setAddingCategory(true);
 	};
 
 	const errorMsg = useRef(null);
+	const editErrorMsg = useRef(null);
 
 	const {
 		register,
@@ -28,16 +32,23 @@ const Categories = (props) => {
 		formState: { errors },
 	} = useForm();
 
+	const {
+		register: registerEdit,
+		handleSubmit: handleSubmitEdit,
+		reset: resetEdit,
+		formState: { errors: errorsEdit },
+	} = useForm();
+
 	const addCategory = (data) => {
-		errorMsg.current.clear();
+		errorMsg?.current.clear();
 		const response = CategoryService.addCategory(data);
 
 		if (response.status === 'success') {
-			props.showGlobalToast('success', 'Nova categoria adicionada com sucesso.');
+			props.showGlobalToast('success', response.message);
 			setCategories(response.data);
 			closeAddCategory();
 		} else {
-			errorMsg.current.replace({
+			errorMsg?.current.replace({
 				severity: 'error',
 				summary: response.message,
 				sticky: true,
@@ -45,17 +56,48 @@ const Categories = (props) => {
 		}
 	};
 
+	const editCategory = (data) => {
+		editErrorMsg?.current.clear();
+		const newData = { ...data, id: categoryBeingEdited.id, user: categoryBeingEdited.user };
+
+		const response = CategoryService.updateCategory(newData);
+
+		if (response.status === 'success') {
+			props.showGlobalToast('success', response.message);
+			setCategories(response.data);
+			closeEditCategory();
+		} else {
+			editErrorMsg?.current.replace({
+				severity: 'error',
+				summary: response.message,
+				sticky: true,
+			});
+		}
+	};
+
+	const clickHandleEdit = (category) => {
+		setAddingCategory(false);
+		setEditingCategory(true);
+		setCategoryBeingEdited(category);
+	};
+
 	const closeAddCategory = () => {
 		reset();
-		errorMsg.current.clear();
+		errorMsg?.current.clear();
 		setAddingCategory(false);
+	};
+
+	const closeEditCategory = () => {
+		resetEdit();
+		editErrorMsg?.current.clear();
+		setEditingCategory(false);
 	};
 
 	const deleteCategory = (data) => {
 		const response = CategoryService.deleteCategory(data);
 
 		if (response.status === 'success') {
-			props.showGlobalToast('success', 'Categoria excluída com sucesso.');
+			props.showGlobalToast('success', response.message);
 			setCategories(response.data);
 		}
 	};
@@ -111,7 +153,12 @@ const Categories = (props) => {
 										</Button>
 									</div>
 									<div className="p-col-12 p-md-6">
-										<Button type="reset" onClick={closeAddCategory} style={{ width: '100%' }}>
+										<Button
+											type="reset"
+											className="p-button-danger"
+											onClick={closeAddCategory}
+											style={{ width: '100%' }}
+										>
 											Cancelar
 										</Button>
 									</div>
@@ -120,7 +167,48 @@ const Categories = (props) => {
 						</div>
 					</Panel>
 				)}
-				{!addingCategory && (
+				{editingCategory && (
+					<Panel header="Editar Categoria" style={{ marginBottom: '15px' }}>
+						<Messages ref={editErrorMsg} />
+						<div className="formLayout">
+							<form onSubmit={handleSubmitEdit(editCategory)}>
+								<label htmlFor="name">Novo Nome da Nova Categoria:</label>
+								<InputText
+									type="text"
+									style={{ textTransform: 'uppercase' }}
+									placeholder={categoryBeingEdited.name}
+									{...registerEdit('name', { required: true })}
+									className={errorsEdit?.name ? 'p-invalid' : ''}
+								/>
+								{errorsEdit?.name && (
+									<Message
+										severity="error"
+										text="Campo obrigatório."
+										style={{ display: 'block', marginBottom: '15px' }}
+									></Message>
+								)}
+								<div className="p-grid">
+									<div className="p-col-12 p-md-6">
+										<Button type="submit" style={{ width: '100%' }}>
+											Salvar
+										</Button>
+									</div>
+									<div className="p-col-12 p-md-6">
+										<Button
+											type="reset"
+											className="p-button-danger"
+											onClick={closeEditCategory}
+											style={{ width: '100%' }}
+										>
+											Cancelar
+										</Button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</Panel>
+				)}
+				{!addingCategory && !editingCategory && (
 					<Button
 						style={{
 							marginBottom: '15px',
@@ -137,7 +225,7 @@ const Categories = (props) => {
 					<table className="customTable">
 						<thead>
 							<tr>
-								<th style={{ width: '50px' }}>ID</th>
+								<th style={{ width: '50px' }}>#</th>
 								<th>Nome</th>
 								<th style={{ width: '80px', textAlign: 'center' }}>Ações</th>
 							</tr>
@@ -153,6 +241,9 @@ const Categories = (props) => {
 											<td style={{ textAlign: 'center' }}>
 												<FaEdit
 													style={{ color: '#0000ff', cursor: 'pointer', margin: '5px' }}
+													onClick={() => {
+														clickHandleEdit(category);
+													}}
 												/>
 												<FaTrashAlt
 													style={{ color: '#ff0000', cursor: 'pointer', margin: '5px' }}

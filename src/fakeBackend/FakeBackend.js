@@ -120,3 +120,43 @@ export const deleteCategory = (user, data) => {
 		return { status: 'success', message: 'Categoria excluída com sucesso.', data: newCategories };
 	}
 };
+
+export const updateCategory = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const categories = backend['categories'] || [];
+
+		const userCategories = categories.filter((category) => {
+			return category.user === authUser.username;
+		});
+
+		const selectedCategory = userCategories.filter((category) => {
+			return category.id === data.id;
+		});
+
+		const remainingCategories = userCategories.filter((category) => {
+			return category.id !== data.id;
+		});
+
+		const existingCategories = remainingCategories.filter((category) => {
+			return category.name === data.name;
+		});
+
+		if (existingCategories.length > 0) {
+			return { status: 'fail', message: 'Categoria já cadastrada.' };
+		}
+
+		selectedCategory[0].name = data.name.toString().toUpperCase();
+
+		remainingCategories.push(selectedCategory[0]);
+
+		const newBackend = { ...backend, categories: remainingCategories };
+
+		localStorage.setItem('backend', JSON.stringify(newBackend));
+
+		return { status: 'success', message: 'Categoria atualizada com sucesso.', data: remainingCategories };
+	}
+};
