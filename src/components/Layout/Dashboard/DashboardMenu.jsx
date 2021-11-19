@@ -1,4 +1,4 @@
-import { React } from 'react';
+import React from 'react';
 import { Button } from 'primereact/button';
 
 const DashboardMenu = (props) => {
@@ -7,10 +7,40 @@ const DashboardMenu = (props) => {
 			<div className="dashboardMenu">
 				<ul>
 					<li>
-						<Button>Lançamentos</Button>
+						<Button
+							onClick={() => {
+								props.setDashboardContent('DashboardExpenses');
+							}}
+						>
+							Lançamentos
+						</Button>
 					</li>
 					<li>
-						<Button>Categorias</Button>
+						<Button
+							onClick={() => {
+								props.setDashboardContent('Categories');
+							}}
+						>
+							Categorias
+						</Button>
+					</li>
+					<li>
+						<Button
+							onClick={() => {
+								props.setDashboardContent('Places');
+							}}
+						>
+							Lugares
+						</Button>
+					</li>
+					<li>
+						<Button
+							onClick={() => {
+								props.setDashboardContent('Reports');
+							}}
+						>
+							Relatórios
+						</Button>
 					</li>
 				</ul>
 			</div>

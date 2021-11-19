@@ -49,6 +49,7 @@ const Login = (props) => {
 						<label htmlFor="username">Nome de Usuário:</label>
 						<InputText
 							type="text"
+							style={{ textTransform: 'lowercase' }}
 							{...register('username', { required: true })}
 							className={errors?.username ? 'p-invalid' : ''}
 						/>

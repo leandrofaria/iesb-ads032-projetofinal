@@ -1,13 +1,13 @@
 import React from 'react';
 import { Panel } from 'primereact/panel';
 
-const DashboardExpenses = () => {
+const Places = () => {
 	return (
 		<>
 			<div style={{ textAlign: 'left' }}>
-				<h3>Painel de Gastos » Lançamentos</h3>
+				<h3>Painel de Gastos » Lugares</h3>
 				<hr className="rightFade" />
-				<Panel header="Novo Lançamento">
+				<Panel header="Novo Lugar" style={{ marginBottom: '15px' }}>
 					<p>hmmm</p>
 				</Panel>
 			</div>
@@ -15,4 +15,4 @@ const DashboardExpenses = () => {
 	);
 };
 
-export default DashboardExpenses;
+export default Places;

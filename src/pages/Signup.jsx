@@ -65,6 +65,7 @@ const Signup = (props) => {
 						<InputText
 							type="text"
 							name="username"
+							style={{ textTransform: 'lowercase' }}
 							{...register('username', { required: true })}
 							className={errors?.username ? 'p-invalid' : ''}
 						/>

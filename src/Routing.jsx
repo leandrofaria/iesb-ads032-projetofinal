@@ -16,7 +16,7 @@ const Routing = (props) => {
 					path="/painel"
 					element={
 						<ProtectedRoute>
-							<Dashboard />
+							<Dashboard showGlobalToast={props.showGlobalToast} />
 						</ProtectedRoute>
 					}
 				/>

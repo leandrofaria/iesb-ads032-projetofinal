@@ -183,6 +183,30 @@ footer {
 	padding: 0;
 	margin-bottom: 10px;
 }
+.customTable {
+	width: 100%;
+}
+.customTable,
+.customTable th,
+.customTable td {
+	border: 1px solid #dee2e6;
+	border-collapse: collapse;
+	padding: 10px;
+}
+.customTable th {
+	background-color: rgba(17, 151, 18, 1);
+	color: #ffffff;
+}
+.customTable tr {
+	background-color: #ffffff;
+}
+.customTable tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+.p-panel {
+	border: 1px solid rgba(17, 101, 18, 0.6) !important;
+	border-radius: 4px;
+}
 @media all and (max-width: 800px) {
 	.mainContainer {
 		width: 100%;
