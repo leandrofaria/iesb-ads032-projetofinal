@@ -3,7 +3,7 @@ import DashboardContainer from '../components/Layout/Dashboard/DashboardContaine
 import DashboardMenu from '../components/Layout/Dashboard/DashboardMenu';
 
 const Dashboard = (props) => {
-	const [dashboardContent, setDashboardContent] = useState('DashboardExpenses');
+	const [dashboardContent, setDashboardContent] = useState('Expenses');
 
 	return (
 		<>

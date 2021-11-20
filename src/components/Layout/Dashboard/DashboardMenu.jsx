@@ -9,7 +9,7 @@ const DashboardMenu = (props) => {
 					<li>
 						<Button
 							onClick={() => {
-								props.setDashboardContent('DashboardExpenses');
+								props.setDashboardContent('Expenses');
 							}}
 						>
 							Lançamentos

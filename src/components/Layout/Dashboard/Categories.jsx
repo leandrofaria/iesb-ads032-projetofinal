@@ -172,7 +172,7 @@ const Categories = (props) => {
 						<Messages ref={editErrorMsg} />
 						<div className="formLayout">
 							<form onSubmit={handleSubmitEdit(editCategory)}>
-								<label htmlFor="name">Novo Nome da Nova Categoria:</label>
+								<label htmlFor="name">Novo Nome da Categoria:</label>
 								<InputText
 									type="text"
 									style={{ textTransform: 'uppercase' }}

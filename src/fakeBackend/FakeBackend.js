@@ -3,6 +3,8 @@ import * as jwt from 'jsonwebtoken';
 
 const JWT_SECRET = 'secureJwtToken';
 
+//############################ AUTH ########################################################
+
 export const login = (username, password) => {
 	const backend = JSON.parse(localStorage.getItem('backend')) || {};
 
@@ -47,6 +49,8 @@ export const signup = (name, username, password) => {
 
 	return { status: 'success', message: 'Usuário cadastrado com sucesso.' };
 };
+
+//############################ CATEGORIES ########################################################
 
 export const getCategories = (user) => {
 	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
@@ -160,3 +164,198 @@ export const updateCategory = (user, data) => {
 		return { status: 'success', message: 'Categoria atualizada com sucesso.', data: remainingCategories };
 	}
 };
+
+//############################ PLACES ########################################################
+
+export const getPlaces = (user) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const places = backend['places'] || [];
+
+		const userPlaces = places.filter((place) => {
+			return place.user === authUser.username;
+		});
+
+		return userPlaces;
+	}
+
+	return [];
+};
+
+export const addPlace = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const places = backend['places'] || [];
+
+		const userPlaces = places.filter((place) => {
+			return place.user === authUser.username;
+		});
+
+		const existingPlaces = userPlaces.filter((place) => {
+			return place.name === data.name.toString().toUpperCase();
+		});
+
+		if (existingPlaces.length > 0) {
+			return { status: 'fail', message: 'Lugar já cadastrado.' };
+		} else {
+			const currentTimestamp = Date.now();
+			const newPlaces = [
+				{ user: authUser.username, name: data.name.toString().toUpperCase(), id: currentTimestamp },
+				...places,
+			];
+			const newBackend = { ...backend, places: newPlaces };
+
+			localStorage.setItem('backend', JSON.stringify(newBackend));
+			return { status: 'success', message: 'Lugar adicionado com sucesso.', data: newPlaces };
+		}
+	}
+};
+
+export const deletePlace = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const places = backend['places'] || [];
+
+		const userPlaces = places.filter((place) => {
+			return place.user === authUser.username;
+		});
+
+		const newPlaces = userPlaces.filter((place) => {
+			return place.id !== data.id;
+		});
+
+		const newBackend = { ...backend, places: newPlaces };
+
+		localStorage.setItem('backend', JSON.stringify(newBackend));
+		return { status: 'success', message: 'Lugar excluído com sucesso.', data: newPlaces };
+	}
+};
+
+export const updatePlace = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const places = backend['places'] || [];
+
+		const userPlaces = places.filter((place) => {
+			return place.user === authUser.username;
+		});
+
+		const selectedCategory = userPlaces.filter((place) => {
+			return place.id === data.id;
+		});
+
+		const remainingPlaces = userPlaces.filter((place) => {
+			return place.id !== data.id;
+		});
+
+		const existingPlaces = remainingPlaces.filter((place) => {
+			return place.name === data.name;
+		});
+
+		if (existingPlaces.length > 0) {
+			return { status: 'fail', message: 'Categoria já cadastrada.' };
+		}
+
+		selectedCategory[0].name = data.name.toString().toUpperCase();
+
+		remainingPlaces.push(selectedCategory[0]);
+
+		const newBackend = { ...backend, places: remainingPlaces };
+
+		localStorage.setItem('backend', JSON.stringify(newBackend));
+
+		return { status: 'success', message: 'Categoria atualizada com sucesso.', data: remainingPlaces };
+	}
+};
+
+//############################ EXPENSES ########################################################
+export const getExpenses = (user) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const expenses = backend['expenses'] || [];
+
+		const userExpenses = expenses.filter((expense) => {
+			return expense.user === authUser.username;
+		});
+
+		return userExpenses;
+	}
+
+	return [];
+};
+
+export const addExpense = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const expenses = backend['expenses'] || [];
+
+		const userExpenses = expenses.filter((expense) => {
+			return expense.user === authUser.username;
+		});
+
+		const currentTimestamp = Date.now();
+		const newExpenses = [
+			{
+				user: authUser.username,
+				description: data.description.toString().toUpperCase(),
+				category: data.category,
+				place: data.place,
+				date: data.data.getTime(),
+				cost: data.cost,
+				id: currentTimestamp,
+			},
+			...userExpenses,
+		];
+
+		console.log(newExpenses);
+
+		const newBackend = { ...backend, expenses: newExpenses };
+
+		localStorage.setItem('backend', JSON.stringify(newBackend));
+
+		return { status: 'success', message: 'Lançamento adicionado com sucesso.', data: newExpenses };
+	}
+};
+
+export const deleteExpense = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const expenses = backend['expenses'] || [];
+
+		const userExpenses = expenses.filter((expense) => {
+			return expense.user === authUser.username;
+		});
+
+		const newExpenses = userExpenses.filter((expense) => {
+			return expense.id !== data.id;
+		});
+
+		const newBackend = { ...backend, expenses: newExpenses };
+
+		localStorage.setItem('backend', JSON.stringify(newBackend));
+		return { status: 'success', message: 'Lançamento excluído com sucesso.', data: newExpenses };
+	}
+};
+
+export const updateExpense = (user, data) => {};

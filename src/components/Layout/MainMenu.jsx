@@ -48,11 +48,6 @@ const MainMenu = (props) => {
 							</li>
 						</Link>
 					))}
-				<Link to="/config" onClick={props.closeMenu}>
-					<li>
-						<Button>Configurações Avançadas</Button>
-					</li>
-				</Link>
 				<Link to="/sobre" onClick={props.closeMenu}>
 					<li>
 						<Button>Sobre o Projeto</Button>
