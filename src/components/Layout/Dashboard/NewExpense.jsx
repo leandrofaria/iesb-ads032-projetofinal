@@ -22,6 +22,8 @@ const NewExpense = (props) => {
 
 	const errorMsg = useRef(null);
 
+	let selectedDate = useRef(null);
+
 	const {
 		register,
 		handleSubmit,
@@ -32,7 +34,12 @@ const NewExpense = (props) => {
 
 	const addExpense = (data) => {
 		errorMsg?.current?.clear();
-		const response = ExpenseService.addExpense(data);
+		let response = null;
+		if (props.expense === null) {
+			response = ExpenseService.addExpense(data);
+		} else {
+			response = ExpenseService.updateExpense(data);
+		}
 
 		if (response.status === 'success') {
 			props.showGlobalToast('success', response.message);
@@ -51,17 +58,32 @@ const NewExpense = (props) => {
 		setCategories(CategoryService.getCategories());
 		setPlaces(PlaceService.getPlaces());
 		setDataLoaded(true);
-		setSelectedCategory(null);
-		setSelectedPlace(null);
 		errorMsg?.current?.clear();
 	}, [dataLoaded]);
 
+	useEffect(() => {
+		if (props.expense !== null) {
+			setValue('description', props.expense.description);
+			setSelectedCategory(props.expense.category);
+			setSelectedPlace(props.expense.place);
+
+			const date = new Date(props.expense.date);
+			selectedDate.current = date;
+
+			setValue('date', selectedDate.current, { shouldValidate: false, shouldTouch: true });
+		}
+	}, [props, setValue]);
+
 	return (
 		<>
-			<Panel header="Novo Lançamento" style={{ marginBottom: '15px' }}>
+			<Panel
+				header={`${props.expense === null ? 'Novo Lançamento' : 'Editar Lançamento'}`}
+				style={{ marginBottom: '15px' }}
+			>
 				<Messages ref={errorMsg} />
 				<div className="formLayout">
 					<form onSubmit={handleSubmit(addExpense)}>
+						{props.expense !== null && <input type="hidden" value={props.expense.id} {...register('id')} />}
 						<label htmlFor="description">Descrição:</label>
 						<InputText
 							type="text"
@@ -80,6 +102,7 @@ const NewExpense = (props) => {
 						<Controller
 							control={control}
 							name="category"
+							defaultValue={props.expense !== null ? props.expense.category : null}
 							render={({
 								field: { onChange },
 								fieldState: { invalid, isTouched, isDirty, error },
@@ -113,6 +136,7 @@ const NewExpense = (props) => {
 						<Controller
 							control={control}
 							name="place"
+							defaultValue={props.expense !== null ? props.expense.place : null}
 							render={({
 								field: { onChange },
 								fieldState: { invalid, isTouched, isDirty, error },
@@ -145,6 +169,7 @@ const NewExpense = (props) => {
 						<label htmlFor="cost">Valor:</label>
 						<CurrencyInput
 							type="number"
+							defaultValue={props.expense !== null ? props.expense.cost : null}
 							{...register('cost', { required: true, min: 0.01 })}
 							className={`p-inputtext ${errors?.cost ? 'p-invalid' : ''}`}
 						/>
@@ -165,9 +190,11 @@ const NewExpense = (props) => {
 						<label htmlFor="date">Data:</label>
 						<Calendar
 							dateFormat="dd/mm/yy"
+							value={props.expense !== null ? selectedDate.current : null}
+							defaultValue={props.expense !== new Date() ? selectedDate.current : null}
 							style={{ width: '100%' }}
 							readOnlyInput
-							{...register('data', { required: true })}
+							{...register('date')}
 						></Calendar>
 						{errors?.data?.type === 'required' && (
 							<Message
@@ -179,7 +206,7 @@ const NewExpense = (props) => {
 						<div className="p-grid">
 							<div className="p-col-12 p-md-6">
 								<Button type="submit" style={{ width: '100%' }}>
-									Adicionar
+									{`${props.expense === null ? 'Adicionar' : 'Salvar'}`}
 								</Button>
 							</div>
 							<div className="p-col-12 p-md-6">

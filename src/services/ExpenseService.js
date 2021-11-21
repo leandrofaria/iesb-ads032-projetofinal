@@ -28,8 +28,7 @@ export const deleteExpense = (data) => {
 export const updateExpense = (data) => {
 	const authUser = AuthService.autoLogin();
 
-	//const response = fakeBackend.updateExpense(authUser, data);
+	const response = fakeBackend.updateExpense(authUser, data);
 
-	const response = null;
 	return response;
 };

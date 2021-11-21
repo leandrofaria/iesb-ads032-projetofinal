@@ -318,14 +318,12 @@ export const addExpense = (user, data) => {
 				description: data.description.toString().toUpperCase(),
 				category: data.category,
 				place: data.place,
-				date: data.data.getTime(),
+				date: data.date.getTime(),
 				cost: data.cost,
 				id: currentTimestamp,
 			},
 			...userExpenses,
 		];
-
-		console.log(newExpenses);
 
 		const newBackend = { ...backend, expenses: newExpenses };
 
@@ -358,4 +356,38 @@ export const deleteExpense = (user, data) => {
 	}
 };
 
-export const updateExpense = (user, data) => {};
+export const updateExpense = (user, data) => {
+	const authUser = jwt.verify(user.jwtToken, 'secureJwtToken');
+
+	if (authUser !== null) {
+		const backend = JSON.parse(localStorage.getItem('backend')) || {};
+
+		const expenses = backend['expenses'] || [];
+
+		const userExpenses = expenses.filter((expense) => {
+			return expense.user === authUser.username;
+		});
+
+		const selectedExpense = userExpenses.filter((expense) => {
+			return expense.id === +data.id;
+		});
+
+		const remainingExpenses = userExpenses.filter((expense) => {
+			return expense.id !== +data.id;
+		});
+
+		selectedExpense[0].description = data.description.toString().toUpperCase();
+		selectedExpense[0].category = data.category;
+		selectedExpense[0].place = data.category;
+		selectedExpense[0].date = data.date.getTime();
+		selectedExpense[0].cost = data.cost;
+
+		remainingExpenses.push(selectedExpense[0]);
+
+		const newBackend = { ...backend, expenses: remainingExpenses };
+
+		localStorage.setItem('backend', JSON.stringify(newBackend));
+
+		return { status: 'success', message: 'Lançamento atualizado com sucesso.', data: remainingExpenses };
+	}
+};

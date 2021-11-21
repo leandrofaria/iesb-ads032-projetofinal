@@ -11,59 +11,23 @@ const Expenses = (props) => {
 	const [expenses, setExpenses] = useState([]);
 	const [dataLoaded, setDataLoaded] = useState(false);
 
-	//const [expenseBeingEdited, setExpenseBeingEdited] = useState(null);
+	const [expenseBeingEdited, setExpenseBeingEdited] = useState(null);
 
 	const [addingExpense, setAddingExpense] = useState(false);
-	//const [editingExpense, setEditingExpense] = useState(false);
 
 	const clickHandleAddExpense = () => {
-		//setEditingExpense(false);
 		setAddingExpense(true);
 	};
 
-	//const editErrorMsg = useRef(null);
-
-	// const {
-	// 	register: registerEdit,
-	// 	handleSubmit: handleSubmitEdit,
-	// 	reset: resetEdit,
-	// 	formState: { errors: errorsEdit },
-	// } = useForm();
-
-	// const editExpense = (data) => {
-	// 	editErrorMsg?.current?.clear();
-	// 	const newData = { ...data, id: expenseBeingEdited.id, user: expenseBeingEdited.user };
-
-	// 	const response = ExpenseService.updateExpense(newData);
-
-	// 	if (response.status === 'success') {
-	// 		props.showGlobalToast('success', response.message);
-	// 		setExpenses(response.data);
-	// 		closeEditExpense();
-	// 	} else {
-	// 		editErrorMsg?.current?.replace({
-	// 			severity: 'error',
-	// 			summary: response.message,
-	// 			sticky: true,
-	// 		});
-	// 	}
-	// };
-
-	// const clickHandleEdit = (expense) => {
-	// 	setAddingExpense(false);
-	// 	setEditingExpense(true);
-	// 	setExpenseBeingEdited(expense);
-	// };
-
-	const closeAddExpense = () => {
-		setAddingExpense(false);
+	const clickHandleEditExpense = (expense) => {
+		setExpenseBeingEdited(expense);
+		setAddingExpense(true);
 	};
 
-	// const closeEditExpense = () => {
-	// 	resetEdit();
-	// 	editErrorMsg?.current?.clear();
-	// 	setEditingExpense(false);
-	// };
+	const closeAddExpense = () => {
+		setExpenseBeingEdited(null);
+		setAddingExpense(false);
+	};
 
 	const deleteExpense = (data) => {
 		const response = ExpenseService.deleteExpense(data);
@@ -105,6 +69,7 @@ const Expenses = (props) => {
 						setExpenses={setExpenses}
 						showGlobalToast={props.showGlobalToast}
 						closeAddExpense={closeAddExpense}
+						expense={expenseBeingEdited}
 					/>
 				)}
 				{!addingExpense && (
@@ -152,7 +117,7 @@ const Expenses = (props) => {
 												<FaEdit
 													style={{ color: '#0000ff', cursor: 'pointer', margin: '5px' }}
 													onClick={() => {
-														//clickHandleEdit(expense);
+														clickHandleEditExpense(expense);
 													}}
 												/>
 												<FaTrashAlt
