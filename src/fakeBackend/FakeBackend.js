@@ -146,7 +146,7 @@ export const updateCategory = (user, data) => {
 		});
 
 		const existingCategories = remainingCategories.filter((category) => {
-			return category.name === data.name;
+			return category.name === data.name.toString().toUpperCase() && category.id !== data.id;
 		});
 
 		if (existingCategories.length > 0) {
@@ -252,7 +252,7 @@ export const updatePlace = (user, data) => {
 			return place.user === authUser.username;
 		});
 
-		const selectedCategory = userPlaces.filter((place) => {
+		const selectedPlace = userPlaces.filter((place) => {
 			return place.id === data.id;
 		});
 
@@ -261,16 +261,16 @@ export const updatePlace = (user, data) => {
 		});
 
 		const existingPlaces = remainingPlaces.filter((place) => {
-			return place.name === data.name;
+			return place.name === data.name.toString().toUpperCase() && place.id !== data.id;
 		});
 
 		if (existingPlaces.length > 0) {
-			return { status: 'fail', message: 'Categoria já cadastrada.' };
+			return { status: 'fail', message: 'Lugar já cadastrado.' };
 		}
 
-		selectedCategory[0].name = data.name.toString().toUpperCase();
+		selectedPlace[0].name = data.name.toString().toUpperCase();
 
-		remainingPlaces.push(selectedCategory[0]);
+		remainingPlaces.push(selectedPlace[0]);
 
 		const newBackend = { ...backend, places: remainingPlaces };
 
