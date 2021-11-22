@@ -27,27 +27,32 @@ const MainMenu = (props) => {
 						</li>
 					</Link>
 				)}
-				{props.authUser === null ||
-					(props.authUser === undefined && (
-						<Link to="/login" onClick={props.closeMenu}>
-							<li>
-								<Button>Login</Button>
-							</li>
-						</Link>
-					))}
+				{(props.authUser === null || props.authUser === undefined) && (
+					<Link to="/login" onClick={props.closeMenu}>
+						<li>
+							<Button>Login</Button>
+						</li>
+					</Link>
+				)}
 				{props.authUser !== null && props.authUser !== undefined && (
 					<li>
-						<Button onClick={handleLogout}>Logout</Button>
+						<Button
+							onClick={() => {
+								props.closeMenu();
+								handleLogout();
+							}}
+						>
+							Logout
+						</Button>
 					</li>
 				)}
-				{props.authUser === null ||
-					(props.authUser === undefined && (
-						<Link to="/signup" onClick={props.closeMenu}>
-							<li>
-								<Button>Cadastro</Button>
-							</li>
-						</Link>
-					))}
+				{(props.authUser === null || props.authUser === undefined) && (
+					<Link to="/signup" onClick={props.closeMenu}>
+						<li>
+							<Button>Cadastro</Button>
+						</li>
+					</Link>
+				)}
 				<Link to="/sobre" onClick={props.closeMenu}>
 					<li>
 						<Button>Sobre o Projeto</Button>
