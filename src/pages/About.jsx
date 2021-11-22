@@ -21,7 +21,7 @@ const About = () => {
 					<hr className="rightFade" />
 					<p>
 						Projeto desenvolvido utilizando-se NodeJS, React e bibliotecas adicionais como PrimeReact,
-						JsonWebToken, CryptoJS, e React Hook Form.
+						JsonWebToken, CryptoJS, ChartJS e React Hook Form.
 					</p>
 				</div>
 			</div>
