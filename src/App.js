@@ -45,7 +45,12 @@ function App() {
 				<div className="mainContainer">
 					<Header toggleMenu={toggleMenu} />
 					<div className={`mainMenu ${isMenuVisible ? '' : 'hiddenMenu'}`}>
-						<MainMenu closeMenu={closeMenu} authUser={authUser} setAuthUser={setAuthUser} />
+						<MainMenu
+							closeMenu={closeMenu}
+							authUser={authUser}
+							setAuthUser={setAuthUser}
+							showGlobalToast={showGlobalToast}
+						/>
 					</div>
 					<div className="contentContainer">
 						<Routing showGlobalToast={showGlobalToast} setAuthUser={setAuthUser} />
